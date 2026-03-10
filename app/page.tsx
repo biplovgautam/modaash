@@ -50,9 +50,13 @@ function Navbar() {
     <nav className="fixed top-0 z-50 w-full border-b border-white/10 bg-white/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white font-bold text-lg">
-            M
-          </div>
+          <Image
+            src="/logo.png"
+            alt="Modaash Logo"
+            width={36}
+            height={36}
+            className="rounded-lg"
+          />
           <span className="text-xl font-bold tracking-tight text-foreground">
             Modaash
           </span>
@@ -134,22 +138,29 @@ function Navbar() {
 /* ───────────────────────── Hero ───────────────────────── */
 function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0">
+    <section className="relative flex flex-col items-center overflow-visible">
+      {/* ── Background layers ── */}
+      {/* Flat background — single consistent color */}
+      <div className="absolute inset-0 bg-slate-900" />
+
+      {/* Subtle radial glow behind the text */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[900px] rounded-full bg-primary/15 blur-3xl" />
+
+      {/* Mountain image — positioned at the bottom, fades via mask (no color overlay) */}
+      <div className="absolute inset-x-0 bottom-0 h-[55%]">
         <Image
           src="/mountain.jpg"
           alt="Mountain landscape"
           fill
-          className="object-cover"
+          className="object-cover object-center"
+          style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 50%)", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 50%)" }}
           priority
           quality={90}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/70 to-slate-900/90" />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/10" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 pt-32 pb-20 text-center">
+      {/* ── Hero text content ── */}
+      <div className="relative z-10 mx-auto max-w-7xl px-6 pt-36 pb-8 text-center sm:pt-40">
         <div className="animate-fade-in-up">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm mb-8">
             <Zap size={14} className="text-yellow-400" />
@@ -188,7 +199,7 @@ function Hero() {
         </div>
 
         {/* Stats */}
-        <div className="animate-fade-in-up animation-delay-800 mx-auto mt-20 grid max-w-3xl grid-cols-2 gap-6 sm:grid-cols-4">
+        <div className="animate-fade-in-up animation-delay-800 mx-auto mt-16 grid max-w-3xl grid-cols-2 gap-6 sm:grid-cols-4">
           {[
             { value: "50+", label: "Agencies" },
             { value: "10K+", label: "Workers Managed" },
@@ -203,8 +214,36 @@ function Hero() {
         </div>
       </div>
 
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
+      {/* ── Floating Screenshot — Zoho-style, protruding into next section ── */}
+      <div className="relative z-20 mx-auto w-full max-w-5xl px-6 mt-14 mb-[-180px] sm:mb-[-220px] md:mb-[-280px]">
+        <div className="animate-fade-in-up animation-delay-800 rounded-2xl border border-white/10 bg-white p-1.5 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.45)] sm:p-2">
+          {/* Browser chrome */}
+          <div className="flex items-center gap-2 rounded-t-xl bg-gray-100 px-4 py-2.5 sm:py-3">
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-red-400 sm:h-3 sm:w-3" />
+              <span className="h-2.5 w-2.5 rounded-full bg-yellow-400 sm:h-3 sm:w-3" />
+              <span className="h-2.5 w-2.5 rounded-full bg-green-400 sm:h-3 sm:w-3" />
+            </div>
+            <div className="ml-3 flex-1 rounded-md bg-white px-3 py-1 text-[10px] text-gray-400 font-mono sm:ml-4 sm:px-4 sm:py-1.5 sm:text-xs">
+              app.modaash.com/dashboard
+            </div>
+          </div>
+          {/* Screenshot */}
+          <div className="relative overflow-hidden rounded-b-xl">
+            <Image
+              src="/ss.png"
+              alt="Modaash Dashboard Screenshot"
+              width={1200}
+              height={675}
+              className="w-full h-auto"
+              quality={95}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom edge — thin fade into white for the next section */}
+      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white via-white/50 to-transparent z-10" />
     </section>
   );
 }
@@ -220,7 +259,7 @@ function ProblemSection() {
   ];
 
   return (
-    <section className="relative py-24 bg-white">
+    <section className="relative pt-[200px] sm:pt-[240px] md:pt-[300px] pb-24 bg-white">
       <div className="mx-auto max-w-7xl px-6">
         <div className="text-center mb-16">
           <span className="inline-block rounded-full bg-red-50 px-4 py-1.5 text-sm font-semibold text-red-600 mb-4">
@@ -848,9 +887,13 @@ function Footer() {
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white font-bold text-lg">
-                M
-              </div>
+              <Image
+                src="/logo.png"
+                alt="Modaash Logo"
+                width={36}
+                height={36}
+                className="rounded-lg"
+              />
               <span className="text-xl font-bold text-white">Modaash</span>
             </div>
             <p className="text-sm leading-relaxed mb-6">
