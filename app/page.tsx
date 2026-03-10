@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "./hooks/useAuth";
+import { useScrollAnimation } from "./hooks/useScrollAnimation";
 import { config } from "./config";
 import {
   Users,
@@ -40,6 +41,28 @@ import {
   Activity,
   Rocket,
 } from "lucide-react";
+
+/* ── Reusable scroll-reveal wrapper ── */
+function ScrollRevealCard({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const ref = useScrollAnimation<HTMLDivElement>();
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: `${delay}ms` }}
+      className={`scroll-reveal ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
 
 /* ───────────────────────── Navbar ───────────────────────── */
 function Navbar() {
@@ -146,14 +169,17 @@ function Hero() {
       {/* Subtle radial glow behind the text */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[900px] rounded-full bg-primary/15 blur-3xl" />
 
-      {/* Mountain image — positioned at the bottom, fades via mask (no color overlay) */}
-      <div className="absolute inset-x-0 bottom-0 h-[55%]">
+      {/* Mountain image — positioned at the bottom, shows full image, fades via mask (no color overlay) */}
+      <div className="absolute inset-x-0 bottom-0 h-[60%]">
         <Image
           src="/mountain.jpg"
           alt="Mountain landscape"
           fill
-          className="object-cover object-center"
-          style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 50%)", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 50%)" }}
+          className="object-cover object-top"
+          style={{
+            maskImage: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 30%, black 65%)",
+            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 30%, black 65%)",
+          }}
           priority
           quality={90}
         />
@@ -216,7 +242,7 @@ function Hero() {
 
       {/* ── Floating Screenshot — Zoho-style, protruding into next section ── */}
       <div className="relative z-20 mx-auto w-full max-w-5xl px-6 mt-14 mb-[-180px] sm:mb-[-220px] md:mb-[-280px]">
-        <div className="animate-fade-in-up animation-delay-800 rounded-2xl border border-white/10 bg-white p-1.5 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.45)] sm:p-2">
+        <div className="animate-fade-in-up animation-delay-800 rounded-2xl border border-white/10 bg-white p-1.5 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.45)] sm:p-2 transition-all duration-500 ease-out hover:scale-[1.025] hover:shadow-[0_32px_100px_-20px_rgba(0,0,0,0.55)]">
           {/* Browser chrome */}
           <div className="flex items-center gap-2 rounded-t-xl bg-gray-100 px-4 py-2.5 sm:py-3">
             <div className="flex items-center gap-1.5">
@@ -258,10 +284,13 @@ function ProblemSection() {
     { icon: <Smartphone size={24} />, text: "Unable to coordinate with sub-agents in real-time?" },
   ];
 
+  const headingRef = useScrollAnimation();
+  const gridRef = useScrollAnimation();
+
   return (
     <section className="relative pt-[200px] sm:pt-[240px] md:pt-[300px] pb-24 bg-white">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="text-center mb-16">
+        <div ref={headingRef} className="scroll-reveal text-center mb-16">
           <span className="inline-block rounded-full bg-red-50 px-4 py-1.5 text-sm font-semibold text-red-600 mb-4">
             The Challenge
           </span>
@@ -270,10 +299,11 @@ function ProblemSection() {
           </h2>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div ref={gridRef} className="scroll-reveal grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {pains.map((p, i) => (
             <div
               key={i}
+              style={{ transitionDelay: `${i * 80}ms` }}
               className="group flex items-start gap-4 rounded-2xl border border-gray-100 bg-gray-50/50 p-6 transition-all hover:border-red-200 hover:bg-red-50/50 hover:shadow-lg"
             >
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-100 text-red-600 transition-colors group-hover:bg-red-200">
@@ -290,6 +320,7 @@ function ProblemSection() {
 
 /* ───────────────────────── Solution Overview ───────────────────────── */
 function SolutionSection() {
+  const ref = useScrollAnimation();
   return (
     <section className="relative py-24 bg-gradient-to-b from-surface to-white overflow-hidden">
       <div className="absolute inset-0 opacity-30">
@@ -297,7 +328,7 @@ function SolutionSection() {
         <div className="absolute bottom-20 right-10 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
       </div>
       <div className="relative mx-auto max-w-7xl px-6">
-        <div className="mx-auto max-w-3xl text-center">
+        <div ref={ref} className="scroll-reveal mx-auto max-w-3xl text-center">
           <span className="inline-block rounded-full bg-green-50 px-4 py-1.5 text-sm font-semibold text-green-600 mb-4">
             The Solution
           </span>
@@ -400,10 +431,12 @@ const features = [
 ];
 
 function FeaturesSection() {
+  const headingRef = useScrollAnimation();
+
   return (
     <section id="features" className="py-24 bg-white">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="text-center mb-16">
+        <div ref={headingRef} className="scroll-reveal text-center mb-16">
           <span className="inline-block rounded-full bg-blue-50 px-4 py-1.5 text-sm font-semibold text-primary mb-4">
             Features
           </span>
@@ -417,16 +450,15 @@ function FeaturesSection() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f, i) => (
-            <div
-              key={i}
-              className={`group rounded-2xl border border-gray-100 bg-white p-8 transition-all hover:shadow-xl hover:-translate-y-1 ${f.borderColor}`}
-            >
-              <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${f.color} mb-6`}>
-                {f.icon}
+            <ScrollRevealCard key={i} delay={i * 60}>
+              <div className={`group rounded-2xl border border-gray-100 bg-white p-8 transition-all hover:shadow-xl hover:-translate-y-1 ${f.borderColor}`}>
+                <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${f.color} mb-6`}>
+                  {f.icon}
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-3">{f.title}</h3>
+                <p className="text-base leading-relaxed text-muted">{f.description}</p>
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">{f.title}</h3>
-              <p className="text-base leading-relaxed text-muted">{f.description}</p>
-            </div>
+            </ScrollRevealCard>
           ))}
         </div>
       </div>
@@ -469,10 +501,11 @@ const steps = [
 ];
 
 function HowItWorksSection() {
+  const headingRef = useScrollAnimation();
   return (
     <section id="how-it-works" className="py-24 bg-gradient-to-b from-surface-alt to-white">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="text-center mb-16">
+        <div ref={headingRef} className="scroll-reveal text-center mb-16">
           <span className="inline-block rounded-full bg-purple-50 px-4 py-1.5 text-sm font-semibold text-purple-600 mb-4">
             How It Works
           </span>
@@ -486,7 +519,7 @@ function HowItWorksSection() {
 
         <div className="relative grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {steps.map((s, i) => (
-            <div key={i} className="relative">
+            <ScrollRevealCard key={i} delay={i * 80}>
               <div className="group rounded-2xl border border-gray-100 bg-white p-8 transition-all hover:shadow-xl hover:border-primary/20">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white text-sm font-bold">
@@ -499,7 +532,7 @@ function HowItWorksSection() {
                 <h3 className="text-xl font-bold text-foreground mb-2">{s.title}</h3>
                 <p className="text-base leading-relaxed text-muted">{s.description}</p>
               </div>
-            </div>
+            </ScrollRevealCard>
           ))}
         </div>
       </div>
@@ -516,10 +549,12 @@ function WhoItsForSection() {
     { icon: <Briefcase size={24} />, title: "HR Managers", description: "At agencies handling diverse job demands" },
   ];
 
+  const headingRef = useScrollAnimation();
+
   return (
     <section className="py-24 bg-white">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="text-center mb-16">
+        <div ref={headingRef} className="scroll-reveal text-center mb-16">
           <span className="inline-block rounded-full bg-teal-50 px-4 py-1.5 text-sm font-semibold text-teal-600 mb-4">
             Who It&apos;s For
           </span>
@@ -530,13 +565,15 @@ function WhoItsForSection() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {audiences.map((a, i) => (
-            <div key={i} className="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-surface p-8 text-center transition-all hover:shadow-xl hover:border-teal-200 hover:-translate-y-1">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-50 text-teal-600 mb-6">
-                {a.icon}
+            <ScrollRevealCard key={i} delay={i * 80}>
+              <div className="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-surface p-8 text-center transition-all hover:shadow-xl hover:border-teal-200 hover:-translate-y-1">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-50 text-teal-600 mb-6">
+                  {a.icon}
+                </div>
+                <h3 className="text-lg font-bold text-foreground mb-2">{a.title}</h3>
+                <p className="text-sm text-muted leading-relaxed">{a.description}</p>
               </div>
-              <h3 className="text-lg font-bold text-foreground mb-2">{a.title}</h3>
-              <p className="text-sm text-muted leading-relaxed">{a.description}</p>
-            </div>
+            </ScrollRevealCard>
           ))}
         </div>
       </div>
@@ -555,6 +592,7 @@ const benefits = [
 ];
 
 function BenefitsSection() {
+  const headingRef = useScrollAnimation();
   return (
     <section className="relative py-24 overflow-hidden">
       {/* Background with mountain image */}
@@ -570,7 +608,7 @@ function BenefitsSection() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6">
-        <div className="text-center mb-16">
+        <div ref={headingRef} className="scroll-reveal text-center mb-16">
           <span className="inline-block rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold text-white mb-4 border border-white/20">
             Benefits
           </span>
@@ -584,13 +622,15 @@ function BenefitsSection() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((b, i) => (
-            <div key={i} className="rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md p-8 transition-all hover:bg-white/15 hover:border-white/20">
-              <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${b.color} mb-6`}>
-                {b.icon}
+            <ScrollRevealCard key={i} delay={i * 80}>
+              <div className="rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md p-8 transition-all hover:bg-white/15 hover:border-white/20">
+                <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${b.color} mb-6`}>
+                  {b.icon}
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">{b.title}</h3>
+                <p className="text-base leading-relaxed text-gray-300">{b.description}</p>
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">{b.title}</h3>
-              <p className="text-base leading-relaxed text-gray-300">{b.description}</p>
-            </div>
+            </ScrollRevealCard>
           ))}
         </div>
       </div>
@@ -613,10 +653,12 @@ function TestimonialsSection() {
     },
   ];
 
+  const headingRef = useScrollAnimation();
+
   return (
     <section className="py-24 bg-surface">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="text-center mb-16">
+        <div ref={headingRef} className="scroll-reveal text-center mb-16">
           <span className="inline-block rounded-full bg-yellow-50 px-4 py-1.5 text-sm font-semibold text-yellow-600 mb-4">
             Testimonials
           </span>
@@ -627,25 +669,27 @@ function TestimonialsSection() {
 
         <div className="grid gap-8 md:grid-cols-2">
           {testimonials.map((t, i) => (
-            <div key={i} className="rounded-2xl border border-gray-100 bg-white p-10 shadow-sm transition-all hover:shadow-xl">
-              <div className="flex gap-1 mb-6">
-                {[...Array(5)].map((_, j) => (
-                  <Star key={j} size={20} className="fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <blockquote className="text-lg leading-relaxed text-gray-700 mb-8">
-                &ldquo;{t.quote}&rdquo;
-              </blockquote>
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-lg">
-                  {t.name[0]}
+            <ScrollRevealCard key={i} delay={i * 120}>
+              <div className="rounded-2xl border border-gray-100 bg-white p-10 shadow-sm transition-all hover:shadow-xl">
+                <div className="flex gap-1 mb-6">
+                  {[...Array(5)].map((_, j) => (
+                    <Star key={j} size={20} className="fill-yellow-400 text-yellow-400" />
+                  ))}
                 </div>
-                <div>
-                  <div className="font-bold text-foreground">{t.name}</div>
-                  <div className="text-sm text-muted">{t.role}</div>
+                <blockquote className="text-lg leading-relaxed text-gray-700 mb-8">
+                  &ldquo;{t.quote}&rdquo;
+                </blockquote>
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-lg">
+                    {t.name[0]}
+                  </div>
+                  <div>
+                    <div className="font-bold text-foreground">{t.name}</div>
+                    <div className="text-sm text-muted">{t.role}</div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </ScrollRevealCard>
           ))}
         </div>
       </div>
@@ -682,10 +726,11 @@ const plans = [
 ];
 
 function PricingSection() {
+  const headingRef = useScrollAnimation();
   return (
     <section id="pricing" className="py-24 bg-white">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="text-center mb-16">
+        <div ref={headingRef} className="scroll-reveal text-center mb-16">
           <span className="inline-block rounded-full bg-green-50 px-4 py-1.5 text-sm font-semibold text-green-600 mb-4">
             Pricing
           </span>
@@ -699,45 +744,46 @@ function PricingSection() {
 
         <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
           {plans.map((p, i) => (
-            <div
-              key={i}
-              className={`relative rounded-2xl border p-8 transition-all hover:shadow-xl ${
-                p.popular
-                  ? "border-primary bg-primary/5 shadow-lg scale-105 ring-2 ring-primary/20"
-                  : "border-gray-200 bg-white hover:-translate-y-1"
-              }`}
-            >
-              {p.popular && (
-                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-bold text-white uppercase tracking-wide">
-                  Most Popular
-                </span>
-              )}
-              <h3 className="text-xl font-bold text-foreground">{p.name}</h3>
-              <p className="mt-2 text-sm text-muted">{p.description}</p>
-              <div className="mt-6 flex items-baseline gap-1">
-                <span className="text-4xl font-extrabold text-foreground">{p.price}</span>
-                <span className="text-muted text-base">{p.period}</span>
-              </div>
-              <Link
-                href={config.registerUrl}
-                target="_blank"
-                className={`mt-8 block w-full rounded-xl py-3.5 text-center text-sm font-semibold transition-all ${
+            <ScrollRevealCard key={i} delay={i * 100}>
+              <div
+                className={`relative rounded-2xl border p-8 transition-all hover:shadow-xl ${
                   p.popular
-                    ? "bg-primary text-white shadow-lg shadow-primary/25 hover:bg-primary-dark"
-                    : "bg-gray-100 text-foreground hover:bg-gray-200"
+                    ? "border-primary bg-primary/5 shadow-lg scale-105 ring-2 ring-primary/20"
+                    : "border-gray-200 bg-white hover:-translate-y-1"
                 }`}
               >
-                {p.price === "Custom" ? "Contact Sales" : "Start Free Trial"}
-              </Link>
-              <ul className="mt-8 space-y-3">
-                {p.features.map((f, j) => (
-                  <li key={j} className="flex items-center gap-3 text-sm text-gray-600">
-                    <CheckCircle2 size={16} className="shrink-0 text-green-500" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                {p.popular && (
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-bold text-white uppercase tracking-wide">
+                    Most Popular
+                  </span>
+                )}
+                <h3 className="text-xl font-bold text-foreground">{p.name}</h3>
+                <p className="mt-2 text-sm text-muted">{p.description}</p>
+                <div className="mt-6 flex items-baseline gap-1">
+                  <span className="text-4xl font-extrabold text-foreground">{p.price}</span>
+                  <span className="text-muted text-base">{p.period}</span>
+                </div>
+                <Link
+                  href={config.registerUrl}
+                  target="_blank"
+                  className={`mt-8 block w-full rounded-xl py-3.5 text-center text-sm font-semibold transition-all ${
+                    p.popular
+                      ? "bg-primary text-white shadow-lg shadow-primary/25 hover:bg-primary-dark"
+                      : "bg-gray-100 text-foreground hover:bg-gray-200"
+                  }`}
+                >
+                  {p.price === "Custom" ? "Contact Sales" : "Start Free Trial"}
+                </Link>
+                <ul className="mt-8 space-y-3">
+                  {p.features.map((f, j) => (
+                    <li key={j} className="flex items-center gap-3 text-sm text-gray-600">
+                      <CheckCircle2 size={16} className="shrink-0 text-green-500" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </ScrollRevealCard>
           ))}
         </div>
       </div>
