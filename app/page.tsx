@@ -71,7 +71,7 @@ function Navbar() {
 
   return (
     <nav className="fixed top-0 z-50 w-full border-b border-white/10 bg-white/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="/logo.png"
@@ -128,7 +128,7 @@ function Navbar() {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="border-t border-gray-100 bg-white px-6 py-4 md:hidden">
+        <div className="border-t border-gray-100 bg-white px-4 py-4 md:hidden sm:px-6">
           <div className="flex flex-col gap-4">
             <a href="#features" onClick={() => setOpen(false)} className="text-sm font-medium text-muted">Features</a>
             <a href="#how-it-works" onClick={() => setOpen(false)} className="text-sm font-medium text-muted">How It Works</a>
@@ -160,14 +160,16 @@ function Navbar() {
 
 /* ───────────────────────── Hero ───────────────────────── */
 function Hero() {
+  const { isLoggedIn, dashboardUrl } = useAuth();
+
   return (
-    <section className="relative flex flex-col items-center overflow-visible">
+    <section className="relative z-20 flex flex-col items-center">
       {/* ── Background layers ── */}
       {/* Flat background — single consistent color */}
-      <div className="absolute inset-0 bg-slate-900" />
-
-      {/* Subtle radial glow behind the text */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[900px] rounded-full bg-primary/15 blur-3xl" />
+      <div className="absolute inset-0 bg-slate-900 overflow-hidden">
+        {/* Subtle radial glow behind the text — contained inside this overflow-hidden wrapper */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[900px] rounded-full bg-primary/15 blur-3xl" />
+      </div>
 
       {/* Mountain image — positioned at the bottom, shows full image, fades via mask (no color overlay) */}
       <div className="absolute inset-x-0 bottom-0 h-[60%]">
@@ -186,15 +188,15 @@ function Hero() {
       </div>
 
       {/* ── Hero text content ── */}
-      <div className="relative z-10 mx-auto max-w-7xl px-6 pt-36 pb-8 text-center sm:pt-40">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pt-28 pb-8 text-center sm:px-6 sm:pt-36 md:pt-40">
         <div className="animate-fade-in-up">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm mb-8">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm mb-6 sm:px-4 sm:py-1.5 sm:text-sm sm:mb-8">
             <Zap size={14} className="text-yellow-400" />
             Built for Nepal&apos;s Recruitment Industry
           </span>
         </div>
 
-        <h1 className="animate-fade-in-up animation-delay-200 mx-auto max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+        <h1 className="animate-fade-in-up animation-delay-200 mx-auto max-w-4xl text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-7xl">
           Transform Your{" "}
           <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
             Workforce
@@ -202,46 +204,48 @@ function Hero() {
           Management
         </h1>
 
-        <p className="animate-fade-in-up animation-delay-400 mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-300 sm:text-xl">
+        <p className="animate-fade-in-up animation-delay-400 mx-auto mt-4 max-w-2xl text-base leading-relaxed text-gray-300 sm:mt-6 sm:text-lg md:text-xl">
           Streamline candidate tracking, employer relationships, and job
           placements — all in one powerful platform built for manpower agencies.
         </p>
 
-        <div className="animate-fade-in-up animation-delay-600 mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <div className="animate-fade-in-up animation-delay-600 mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-4">
           <Link
-            href={config.registerUrl}
+            href={isLoggedIn ? dashboardUrl : config.registerUrl}
             target="_blank"
-            className="group inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-white shadow-2xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-primary/40 hover:scale-105"
+            className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-white shadow-2xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-primary/40 hover:scale-105 sm:w-auto sm:px-8 sm:py-4 sm:text-base"
           >
-            Start Free Trial
+            {isLoggedIn ? "Go to Dashboard" : "Start Free Trial"}
             <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
           </Link>
-          <a
-            href="#how-it-works"
-            className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-8 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20"
-          >
-            Watch Demo
-          </a>
+          {!isLoggedIn && (
+            <a
+              href="#how-it-works"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20 sm:w-auto sm:px-8 sm:py-4 sm:text-base"
+            >
+              Watch Demo
+            </a>
+          )}
         </div>
 
         {/* Stats */}
-        <div className="animate-fade-in-up animation-delay-800 mx-auto mt-16 grid max-w-3xl grid-cols-2 gap-6 sm:grid-cols-4">
+        <div className="animate-fade-in-up animation-delay-800 mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-3 sm:mt-16 sm:grid-cols-4 sm:gap-6">
           {[
             { value: "50+", label: "Agencies" },
             { value: "10K+", label: "Workers Managed" },
             { value: "99.9%", label: "Uptime" },
             { value: "24/7", label: "Support" },
           ].map((s) => (
-            <div key={s.label} className="rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 p-4">
-              <div className="text-2xl font-bold text-white sm:text-3xl">{s.value}</div>
-              <div className="mt-1 text-sm text-gray-400">{s.label}</div>
+            <div key={s.label} className="rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 p-3 sm:p-4">
+              <div className="text-xl font-bold text-white sm:text-2xl md:text-3xl">{s.value}</div>
+              <div className="mt-0.5 text-xs text-gray-400 sm:mt-1 sm:text-sm">{s.label}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* ── Floating Screenshot — Zoho-style, protruding into next section ── */}
-      <div className="relative z-20 mx-auto w-full max-w-5xl px-6 mt-14 mb-[-180px] sm:mb-[-220px] md:mb-[-280px]">
+      <div className="relative z-30 mx-auto w-full max-w-5xl px-4 mt-10 mb-[-120px] sm:px-6 sm:mt-14 sm:mb-[-180px] md:mb-[-280px]">
         <div className="animate-fade-in-up animation-delay-800 rounded-2xl border border-white/10 bg-white p-1.5 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.45)] sm:p-2 transition-all duration-500 ease-out hover:scale-[1.025] hover:shadow-[0_32px_100px_-20px_rgba(0,0,0,0.55)]">
           {/* Browser chrome */}
           <div className="flex items-center gap-2 rounded-t-xl bg-gray-100 px-4 py-2.5 sm:py-3">
@@ -288,28 +292,28 @@ function ProblemSection() {
   const gridRef = useScrollAnimation();
 
   return (
-    <section className="relative pt-[200px] sm:pt-[240px] md:pt-[300px] pb-24 bg-white">
-      <div className="mx-auto max-w-7xl px-6">
-        <div ref={headingRef} className="scroll-reveal text-center mb-16">
+    <section className="relative z-10 pt-[140px] sm:pt-[200px] md:pt-[300px] pb-16 sm:pb-24 bg-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div ref={headingRef} className="scroll-reveal text-center mb-10 sm:mb-16">
           <span className="inline-block rounded-full bg-red-50 px-4 py-1.5 text-sm font-semibold text-red-600 mb-4">
             The Challenge
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
             Managing Overseas Recruitment<br className="hidden sm:block" /> Shouldn&apos;t Be This Hard
           </h2>
         </div>
 
-        <div ref={gridRef} className="scroll-reveal grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div ref={gridRef} className="scroll-reveal grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
           {pains.map((p, i) => (
             <div
               key={i}
               style={{ transitionDelay: `${i * 80}ms` }}
-              className="group flex items-start gap-4 rounded-2xl border border-gray-100 bg-gray-50/50 p-6 transition-all hover:border-red-200 hover:bg-red-50/50 hover:shadow-lg"
+              className="group flex items-start gap-3 sm:gap-4 rounded-2xl border border-gray-100 bg-gray-50/50 p-4 sm:p-6 transition-all hover:border-red-200 hover:bg-red-50/50 hover:shadow-lg"
             >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-100 text-red-600 transition-colors group-hover:bg-red-200">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl bg-red-100 text-red-600 transition-colors group-hover:bg-red-200">
                 {p.icon}
               </div>
-              <p className="text-base font-medium text-gray-700 leading-relaxed">{p.text}</p>
+              <p className="text-sm sm:text-base font-medium text-gray-700 leading-relaxed">{p.text}</p>
             </div>
           ))}
         </div>
@@ -321,21 +325,22 @@ function ProblemSection() {
 /* ───────────────────────── Solution Overview ───────────────────────── */
 function SolutionSection() {
   const ref = useScrollAnimation();
+  const { isLoggedIn, dashboardUrl } = useAuth();
   return (
-    <section className="relative py-24 bg-gradient-to-b from-surface to-white overflow-hidden">
+    <section className="relative py-16 sm:py-24 bg-gradient-to-b from-surface to-white overflow-hidden">
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-20 left-10 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute bottom-20 right-10 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
       </div>
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <div ref={ref} className="scroll-reveal mx-auto max-w-3xl text-center">
           <span className="inline-block rounded-full bg-green-50 px-4 py-1.5 text-sm font-semibold text-green-600 mb-4">
             The Solution
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
             One Platform. Complete Control.<br className="hidden sm:block" /> Better Results.
           </h2>
-          <p className="mt-6 text-lg leading-relaxed text-muted">
+          <p className="mt-4 text-base leading-relaxed text-muted sm:mt-6 sm:text-lg">
             Our cloud-based manpower management system digitizes your entire
             recruitment workflow — from candidate registration to final
             deployment. Manage workers, employers, job demands, and sub-agents
@@ -343,11 +348,11 @@ function SolutionSection() {
           </p>
           <div className="mt-10">
             <Link
-              href={config.registerUrl}
+              href={isLoggedIn ? dashboardUrl : config.registerUrl}
               target="_blank"
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-white shadow-lg shadow-primary/25 transition hover:bg-primary-dark hover:scale-105"
             >
-              Get Started Free <ArrowRight size={18} />
+              {isLoggedIn ? "Go to Dashboard" : "Get Started Free"} <ArrowRight size={18} />
             </Link>
           </div>
         </div>
@@ -434,13 +439,13 @@ function FeaturesSection() {
   const headingRef = useScrollAnimation();
 
   return (
-    <section id="features" className="py-24 bg-white">
-      <div className="mx-auto max-w-7xl px-6">
-        <div ref={headingRef} className="scroll-reveal text-center mb-16">
+    <section id="features" className="py-16 sm:py-24 bg-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div ref={headingRef} className="scroll-reveal text-center mb-10 sm:mb-16">
           <span className="inline-block rounded-full bg-blue-50 px-4 py-1.5 text-sm font-semibold text-primary mb-4">
             Features
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
             Everything You Need to Succeed
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted">
@@ -448,15 +453,15 @@ function FeaturesSection() {
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f, i) => (
             <ScrollRevealCard key={i} delay={i * 60}>
-              <div className={`group rounded-2xl border border-gray-100 bg-white p-8 transition-all hover:shadow-xl hover:-translate-y-1 ${f.borderColor}`}>
-                <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${f.color} mb-6`}>
+              <div className={`group rounded-2xl border border-gray-100 bg-white p-6 sm:p-8 transition-all hover:shadow-xl hover:-translate-y-1 ${f.borderColor}`}>
+                <div className={`inline-flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl ${f.color} mb-4 sm:mb-6`}>
                   {f.icon}
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-3">{f.title}</h3>
-                <p className="text-base leading-relaxed text-muted">{f.description}</p>
+                <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 sm:mb-3">{f.title}</h3>
+                <p className="text-sm sm:text-base leading-relaxed text-muted">{f.description}</p>
               </div>
             </ScrollRevealCard>
           ))}
@@ -503,13 +508,13 @@ const steps = [
 function HowItWorksSection() {
   const headingRef = useScrollAnimation();
   return (
-    <section id="how-it-works" className="py-24 bg-gradient-to-b from-surface-alt to-white">
-      <div className="mx-auto max-w-7xl px-6">
-        <div ref={headingRef} className="scroll-reveal text-center mb-16">
+    <section id="how-it-works" className="py-16 sm:py-24 bg-gradient-to-b from-surface-alt to-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div ref={headingRef} className="scroll-reveal text-center mb-10 sm:mb-16">
           <span className="inline-block rounded-full bg-purple-50 px-4 py-1.5 text-sm font-semibold text-purple-600 mb-4">
             How It Works
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
             Simple Steps to Get Started
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted">
@@ -517,10 +522,10 @@ function HowItWorksSection() {
           </p>
         </div>
 
-        <div className="relative grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="relative grid gap-4 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
           {steps.map((s, i) => (
             <ScrollRevealCard key={i} delay={i * 80}>
-              <div className="group rounded-2xl border border-gray-100 bg-white p-8 transition-all hover:shadow-xl hover:border-primary/20">
+              <div className="group rounded-2xl border border-gray-100 bg-white p-6 sm:p-8 transition-all hover:shadow-xl hover:border-primary/20">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white text-sm font-bold">
                     {i + 1}
@@ -552,26 +557,26 @@ function WhoItsForSection() {
   const headingRef = useScrollAnimation();
 
   return (
-    <section className="py-24 bg-white">
-      <div className="mx-auto max-w-7xl px-6">
-        <div ref={headingRef} className="scroll-reveal text-center mb-16">
+    <section className="py-16 sm:py-24 bg-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div ref={headingRef} className="scroll-reveal text-center mb-10 sm:mb-16">
           <span className="inline-block rounded-full bg-teal-50 px-4 py-1.5 text-sm font-semibold text-teal-600 mb-4">
             Who It&apos;s For
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
             Built for Recruitment Professionals
           </h2>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-6 grid-cols-2 lg:grid-cols-4">
           {audiences.map((a, i) => (
             <ScrollRevealCard key={i} delay={i * 80}>
-              <div className="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-surface p-8 text-center transition-all hover:shadow-xl hover:border-teal-200 hover:-translate-y-1">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-50 text-teal-600 mb-6">
+              <div className="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-surface p-5 sm:p-8 text-center transition-all hover:shadow-xl hover:border-teal-200 hover:-translate-y-1">
+                <div className="mx-auto flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-teal-50 text-teal-600 mb-4 sm:mb-6">
                   {a.icon}
                 </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">{a.title}</h3>
-                <p className="text-sm text-muted leading-relaxed">{a.description}</p>
+                <h3 className="text-sm sm:text-lg font-bold text-foreground mb-1 sm:mb-2">{a.title}</h3>
+                <p className="text-xs sm:text-sm text-muted leading-relaxed">{a.description}</p>
               </div>
             </ScrollRevealCard>
           ))}
@@ -594,7 +599,7 @@ const benefits = [
 function BenefitsSection() {
   const headingRef = useScrollAnimation();
   return (
-    <section className="relative py-24 overflow-hidden">
+    <section className="relative py-16 sm:py-24 overflow-hidden">
       {/* Background with mountain image */}
       <div className="absolute inset-0">
         <Image
@@ -607,12 +612,12 @@ function BenefitsSection() {
         <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-sm" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6">
-        <div ref={headingRef} className="scroll-reveal text-center mb-16">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <div ref={headingRef} className="scroll-reveal text-center mb-10 sm:mb-16">
           <span className="inline-block rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold text-white mb-4 border border-white/20">
             Benefits
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl lg:text-5xl">
             Why Agencies Choose Modaash
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-300">
@@ -620,10 +625,10 @@ function BenefitsSection() {
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((b, i) => (
             <ScrollRevealCard key={i} delay={i * 80}>
-              <div className="rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md p-8 transition-all hover:bg-white/15 hover:border-white/20">
+              <div className="rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md p-6 sm:p-8 transition-all hover:bg-white/15 hover:border-white/20">
                 <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${b.color} mb-6`}>
                   {b.icon}
                 </div>
@@ -656,27 +661,27 @@ function TestimonialsSection() {
   const headingRef = useScrollAnimation();
 
   return (
-    <section className="py-24 bg-surface">
-      <div className="mx-auto max-w-7xl px-6">
-        <div ref={headingRef} className="scroll-reveal text-center mb-16">
+    <section className="py-16 sm:py-24 bg-surface">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div ref={headingRef} className="scroll-reveal text-center mb-10 sm:mb-16">
           <span className="inline-block rounded-full bg-yellow-50 px-4 py-1.5 text-sm font-semibold text-yellow-600 mb-4">
             Testimonials
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
             Trusted by Leading Agencies
           </h2>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-4 sm:gap-8 md:grid-cols-2">
           {testimonials.map((t, i) => (
             <ScrollRevealCard key={i} delay={i * 120}>
-              <div className="rounded-2xl border border-gray-100 bg-white p-10 shadow-sm transition-all hover:shadow-xl">
+              <div className="rounded-2xl border border-gray-100 bg-white p-6 sm:p-10 shadow-sm transition-all hover:shadow-xl">
                 <div className="flex gap-1 mb-6">
                   {[...Array(5)].map((_, j) => (
                     <Star key={j} size={20} className="fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <blockquote className="text-lg leading-relaxed text-gray-700 mb-8">
+                <blockquote className="text-base sm:text-lg leading-relaxed text-gray-700 mb-6 sm:mb-8">
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
                 <div className="flex items-center gap-4">
@@ -728,13 +733,13 @@ const plans = [
 function PricingSection() {
   const headingRef = useScrollAnimation();
   return (
-    <section id="pricing" className="py-24 bg-white">
-      <div className="mx-auto max-w-7xl px-6">
-        <div ref={headingRef} className="scroll-reveal text-center mb-16">
+    <section id="pricing" className="py-16 sm:py-24 bg-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div ref={headingRef} className="scroll-reveal text-center mb-10 sm:mb-16">
           <span className="inline-block rounded-full bg-green-50 px-4 py-1.5 text-sm font-semibold text-green-600 mb-4">
             Pricing
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
             Simple, Transparent Pricing
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted">
@@ -742,13 +747,13 @@ function PricingSection() {
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-3 max-w-5xl mx-auto">
           {plans.map((p, i) => (
             <ScrollRevealCard key={i} delay={i * 100}>
               <div
-                className={`relative rounded-2xl border p-8 transition-all hover:shadow-xl ${
+                className={`relative rounded-2xl border p-6 sm:p-8 transition-all hover:shadow-xl ${
                   p.popular
-                    ? "border-primary bg-primary/5 shadow-lg scale-105 ring-2 ring-primary/20"
+                    ? "border-primary bg-primary/5 shadow-lg md:scale-105 ring-2 ring-primary/20"
                     : "border-gray-200 bg-white hover:-translate-y-1"
                 }`}
               >
@@ -820,10 +825,10 @@ function FAQItem({ faq }: { faq: { q: string; a: string } }) {
   return (
     <div className="rounded-2xl border border-gray-100 bg-white transition-all hover:border-gray-200">
       <button
-        className="flex w-full items-center justify-between px-8 py-6 text-left"
+        className="flex w-full items-center justify-between px-5 py-5 sm:px-8 sm:py-6 text-left"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-base font-semibold text-foreground pr-4">{faq.q}</span>
+        <span className="text-sm sm:text-base font-semibold text-foreground pr-4">{faq.q}</span>
         {isOpen ? (
           <ChevronUp size={20} className="shrink-0 text-muted" />
         ) : (
@@ -831,8 +836,8 @@ function FAQItem({ faq }: { faq: { q: string; a: string } }) {
         )}
       </button>
       {isOpen && (
-        <div className="px-8 pb-6">
-          <p className="text-base leading-relaxed text-muted">{faq.a}</p>
+        <div className="px-5 pb-5 sm:px-8 sm:pb-6">
+          <p className="text-sm sm:text-base leading-relaxed text-muted">{faq.a}</p>
         </div>
       )}
     </div>
@@ -841,13 +846,13 @@ function FAQItem({ faq }: { faq: { q: string; a: string } }) {
 
 function FAQSection() {
   return (
-    <section id="faq" className="py-24 bg-surface">
-      <div className="mx-auto max-w-3xl px-6">
-        <div className="text-center mb-16">
+    <section id="faq" className="py-16 sm:py-24 bg-surface">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+        <div className="text-center mb-10 sm:mb-16">
           <span className="inline-block rounded-full bg-indigo-50 px-4 py-1.5 text-sm font-semibold text-indigo-600 mb-4">
             FAQ
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
             Frequently Asked Questions
           </h2>
         </div>
@@ -865,34 +870,34 @@ function FAQSection() {
 /* ───────────────────────── CTA ───────────────────────── */
 function CTASection() {
   return (
-    <section className="py-24 bg-white">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary-dark to-blue-900 p-12 sm:p-20 text-center">
+    <section className="py-16 sm:py-24 bg-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-primary via-primary-dark to-blue-900 p-8 sm:p-12 md:p-20 text-center">
           {/* Decorative */}
           <div className="absolute top-0 left-0 h-64 w-64 rounded-full bg-white/5 -translate-x-1/2 -translate-y-1/2" />
           <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-white/5 translate-x-1/3 translate-y-1/3" />
 
           <div className="relative z-10">
-            <h2 className="text-3xl font-bold text-white sm:text-4xl md:text-5xl">
+            <h2 className="text-2xl font-bold text-white sm:text-3xl md:text-4xl lg:text-5xl">
               Ready to Modernize Your<br className="hidden sm:block" /> Recruitment Process?
             </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-blue-100">
+            <p className="mx-auto mt-4 max-w-2xl text-base text-blue-100 sm:mt-6 sm:text-lg">
               Join 50+ manpower agencies already using our platform to
               streamline operations and grow their business.
             </p>
 
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-4">
               <Link
                 href={config.registerUrl}
                 target="_blank"
-                className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-base font-semibold text-primary shadow-xl transition-all hover:bg-gray-50 hover:scale-105"
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-primary shadow-xl transition-all hover:bg-gray-50 hover:scale-105 sm:w-auto sm:px-8 sm:py-4 sm:text-base"
               >
                 Start Your Free Trial
                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
               </Link>
               <a
                 href={config.supportMailto}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/25 px-8 py-4 text-base font-semibold text-white transition hover:bg-white/10"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/25 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto sm:px-8 sm:py-4 sm:text-base"
               >
                 Schedule a Demo
               </a>
@@ -903,7 +908,7 @@ function CTASection() {
             </p>
 
             {/* Trust badges */}
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-blue-200">
+            <div className="mt-8 sm:mt-12 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-6 text-xs sm:text-sm text-blue-200">
               <span className="flex items-center gap-2">
                 <Shield size={16} /> Bank-Level Security
               </span>
@@ -928,8 +933,8 @@ function CTASection() {
 function Footer() {
   return (
     <footer className="border-t border-gray-100 bg-slate-900 text-gray-400">
-      <div className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+        <div className="grid gap-8 sm:gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
@@ -1002,7 +1007,7 @@ function Footer() {
 /* ───────────────────────── Main Page ───────────────────────── */
 export default function Home() {
   return (
-    <main className="min-h-screen font-sans">
+    <main className="min-h-screen font-sans overflow-x-hidden">
       <Navbar />
       <Hero />
       <ProblemSection />
