@@ -705,17 +705,17 @@ function TestimonialsSection() {
 /* ───────────────────────── Pricing ───────────────────────── */
 const plans = [
   {
-    name: "Starter",
-    price: "$49",
-    period: "/month",
+    name: "Freemium",
+    price: "Rs 0",
+    period: "/month (first 3 months)",
     description: "Perfect for small agencies getting started",
     features: ["Up to 100 workers", "Basic analytics", "Email support", "Document storage", "BS calendar"],
     popular: false,
   },
   {
     name: "Professional",
-    price: "$99",
-    period: "/month",
+    price: "Rs 20,000",
+    period: "/annum",
     description: "For growing agencies with higher demands",
     features: ["Up to 500 workers", "Advanced analytics", "Priority support", "Unlimited documents", "BS calendar", "Sub-agent management", "Real-time notifications"],
     popular: true,
@@ -724,7 +724,7 @@ const plans = [
     name: "Enterprise",
     price: "Custom",
     period: "",
-    description: "For large-scale operations",
+    description: "Contact sales for custom enterprise solutions",
     features: ["Unlimited workers", "Custom analytics", "Dedicated account manager", "API access", "Custom integrations", "On-premise option", "SLA guarantee"],
     popular: false,
   },
@@ -743,7 +743,7 @@ function PricingSection() {
             Simple, Transparent Pricing
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted">
-            Start with a 14-day free trial. No credit card required.
+            Choose the right plan for your agency.
           </p>
         </div>
 
