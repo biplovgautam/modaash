@@ -953,9 +953,12 @@ function Footer() {
             <p className="text-sm leading-relaxed mb-6">
               End-to-end recruitment platform for manpower agencies. Built for Nepal&apos;s recruitment industry.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col gap-3">
               <a href={config.supportMailto} className="flex items-center gap-2 text-sm hover:text-white transition-colors">
-                <Mail size={14} /> {config.supportEmail}
+                <Mail size={14} className="shrink-0" /> {config.supportEmail}
+              </a>
+              <a href="mailto:modaash.com@gmail.com" className="flex items-center gap-2 text-sm hover:text-white transition-colors">
+                <Mail size={14} className="shrink-0" /> modaash.com@gmail.com
               </a>
             </div>
           </div>
@@ -997,8 +1000,8 @@ function Footer() {
             © {new Date().getFullYear()} Modaash. All rights reserved.
           </p>
           <div className="flex items-center gap-2 text-sm">
-            <MapPin size={14} />
-            <span>Kathmandu, Nepal</span>
+            <MapPin size={14} className="shrink-0" />
+            <span>Thapathali, Kathmandu</span>
           </div>
         </div>
       </div>

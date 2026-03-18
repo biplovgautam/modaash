@@ -83,7 +83,7 @@ export default function PrivacyPolicy() {
             <h2 className="text-2xl font-bold text-slate-900 mb-4">8. Contact Information</h2>
             <p className="leading-relaxed mb-4">For any privacy-related inquiries or to exercise your rights, please contact our Data Compliance Officer:</p>
             <ul className="list-none space-y-2">
-              <li><strong>Email:</strong> modaash.com@gmail.com</li>
+              <li><strong>Emails:</strong> support@modaash.com, modaash.com@gmail.com</li>
               <li><strong>Office Address:</strong> Thapathali kathmandu</li>
             </ul>
           </section>

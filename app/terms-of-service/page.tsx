@@ -106,6 +106,17 @@ export default function TermsOfService() {
               We may modify these Terms from time to time. We will notify you of any significant changes via the dashboard interface or email. Continued use of the Service constitutes acceptance of the new Terms.
             </p>
           </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">11. Contact Information</h2>
+            <p className="leading-relaxed mb-4">
+              For any questions regarding these Terms of Service or to reach support, please contact us at:
+            </p>
+            <ul className="list-none space-y-2">
+              <li><strong>Emails:</strong> support@modaash.com, modaash.com@gmail.com</li>
+              <li><strong>Office Address:</strong> Thapathali kathmandu</li>
+            </ul>
+          </section>
         </div>
       </div>
     </div>
