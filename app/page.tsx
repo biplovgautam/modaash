@@ -705,12 +705,13 @@ function TestimonialsSection() {
 /* ───────────────────────── Pricing ───────────────────────── */
 const plans = [
   {
-    name: "Freemium",
+    name: "Free Trial",
     price: "Rs 0",
-    period: "/month (first 3 months)",
-    description: "Perfect for small agencies getting started",
-    features: ["Up to 100 workers", "Basic analytics", "Email support", "Document storage", "BS calendar"],
+    period: "/for 1 month",
+    description: "Try out the Professional plan for a month",
+    features: ["Up to 500 workers", "Advanced analytics", "Priority support", "Unlimited documents", "BS calendar", "Sub-agent management", "Real-time notifications"],
     popular: false,
+    buttonText: "Start Free Trial",
   },
   {
     name: "Professional",
@@ -719,6 +720,7 @@ const plans = [
     description: "For growing agencies with higher demands",
     features: ["Up to 500 workers", "Advanced analytics", "Priority support", "Unlimited documents", "BS calendar", "Sub-agent management", "Real-time notifications"],
     popular: true,
+    buttonText: "Get Started",
   },
   {
     name: "Enterprise",
@@ -727,6 +729,7 @@ const plans = [
     description: "Contact sales for custom enterprise solutions",
     features: ["Unlimited workers", "Custom analytics", "Dedicated account manager", "API access", "Custom integrations", "On-premise option", "SLA guarantee"],
     popular: false,
+    buttonText: "Contact Sales",
   },
 ];
 
@@ -777,7 +780,7 @@ function PricingSection() {
                       : "bg-gray-100 text-foreground hover:bg-gray-200"
                   }`}
                 >
-                  {p.price === "Custom" ? "Contact Sales" : "Start Free Trial"}
+                  {p.buttonText}
                 </Link>
                 <ul className="mt-8 space-y-3">
                   {p.features.map((f, j) => (
